@@ -1,0 +1,15 @@
+# Test binary, built with `go test -c`
+*.test
+
+# Go workspace file
+go.work
+
+# IDE files
+.vscode/
+
+# OS generated files
+.DS_Store
+.DS_Store?
+
+# Build files
+recurse-interview
