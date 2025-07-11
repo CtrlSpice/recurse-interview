@@ -36,6 +36,6 @@ go build -o recurse-interview
 
 ### Trying it out
 ```bash
-curl "http://localhost:4000/set?key=hello&value=there"
-curl -w "\n" "http://localhost:4000/get?key=hello"
+curl "http://localhost:4000/set?hello=there"
+curl "http://localhost:4000/get?key=hello"
 ```

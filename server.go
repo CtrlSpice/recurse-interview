@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"net/url"
 	"os"
 	"os/signal"
 	"syscall"
@@ -73,25 +74,37 @@ func (s *Server) getHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	log.Printf("Getting value for key '%s'", key)
 	value := s.store.Get(key)
 	if value == nil {
-		log.Printf("Key '%s' not found", key)
 		http.Error(w, "key not found", http.StatusNotFound)
 		return
 	}
 
-	log.Printf("Retrieved value '%s' for key '%s'", value, key)
 	fmt.Fprintf(w, "%s", value)
 }
 
 func (s *Server) setHandler(w http.ResponseWriter, r *http.Request) {
-	key := r.URL.Query().Get("key")
-	value := r.URL.Query().Get("value")
-
-	if key == "" {
+	// Parse query parameters and check for errors
+	values, err := url.ParseQuery(r.URL.RawQuery)
+	if err != nil {
+		http.Error(w, "invalid query parameters", http.StatusBadRequest)
+		return
+	}
+	
+	// Check if we have any key-value pairs
+	if len(values) == 0 {
 		http.Error(w, "missing key parameter", http.StatusBadRequest)
 		return
+	}
+	
+	// Keep the first key-value pair
+	var key, value string
+	for k, v := range values {
+		if len(v) > 0 {
+			key = k
+			value = v[0]
+			break
+		}
 	}
 
 	s.store.Set(key, value)

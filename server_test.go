@@ -22,7 +22,7 @@ func TestNewServer(t *testing.T) {
 func TestServer_SetHandler_Success(t *testing.T) {
 	server := NewServer("localhost:4000")
 
-	req, err := http.NewRequest("GET", "/set?key=name&value=Obi-Wan Kenobi", nil)
+	req, err := http.NewRequest("GET", "/set?name=Obi-Wan Kenobi", nil)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -50,7 +50,7 @@ func TestServer_SetHandler_Success(t *testing.T) {
 func TestServer_SetHandler_MissingKey(t *testing.T) {
 	server := NewServer("localhost:4000")
 
-	req, err := http.NewRequest("GET", "/set?value=Obi-Wan Kenobi", nil)
+	req, err := http.NewRequest("GET", "/set", nil)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -142,7 +142,7 @@ func TestServer_Handler_Routes(t *testing.T) {
 	handler := server.Handler()
 
 	// set route
-	req, err := http.NewRequest("GET", "/set?key=test&value=value", nil)
+	req, err := http.NewRequest("GET", "/set?test=value", nil)
 	if err != nil {
 		t.Fatal(err)
 	}
